@@ -12,7 +12,6 @@ services:
     env_file:
       - vault.env
     deploy:
-      mode: global
       placement:
         constraints: [node.hostname == node1]
     command: server

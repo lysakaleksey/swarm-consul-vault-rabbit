@@ -15,4 +15,4 @@ docker stack deploy -c consul.yml consul
 docker stack deploy -c vault.yml vault
 
 # Deploy rabbit stack
-docker stack deploy -c rabbitmq.yml rabbit
+#docker stack deploy -c rabbitmq.yml rabbit

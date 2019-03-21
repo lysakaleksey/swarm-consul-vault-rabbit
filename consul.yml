@@ -8,9 +8,8 @@ volumes:
   consul-2-data:
   consul-3-data:
 services:
-  server-1:
+  server1:
     image: consul:1.4.3
-    hostname: consul-server-1
     networks:
       - consul
     env_file:
@@ -18,13 +17,11 @@ services:
     volumes:
       - consul-1-data:/consul/data
     deploy:
-      mode: global
       placement:
         constraints: [node.hostname == node1]
     command: "agent -server -bootstrap-expect 3 -client 0.0.0.0"
-  server-2:
+  server2:
     image: consul:1.4.3
-    hostname: consul-server-2
     networks:
       - consul
     env_file:
@@ -32,13 +29,11 @@ services:
     volumes:
       - consul-2-data:/consul/data
     deploy:
-      mode: global
       placement:
         constraints: [node.hostname == node2]
     command: "agent -server -retry-join server1 -client 0.0.0.0"
-  server-3:
+  server3:
     image: consul:1.4.3
-    hostname: consul-server-3
     networks:
       - consul
     env_file:
@@ -46,7 +41,6 @@ services:
     volumes:
       - consul-3-data:/consul/data
     deploy:
-      mode: global
       placement:
         constraints: [node.hostname == node3]
     command: "agent -server -retry-join server1 -client 0.0.0.0"
@@ -55,12 +49,12 @@ services:
     networks:
       - consul
       - infra
+    env_file:
+      - consul.env
     ports:
       - 8500:8500
       - 8600:8600
       - 8600:8600/udp
-    env_file:
-      - consul.env
-    command: "agent -retry-join server1 -ui -client 0.0.0.0"
     deploy:
       mode: global
+    command: "agent -ui -retry-join server1 -client 0.0.0.0"
