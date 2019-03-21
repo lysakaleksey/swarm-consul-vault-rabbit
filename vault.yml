@@ -1,0 +1,18 @@
+version: '3.6'
+networks:
+  infra:
+    external: true
+services:
+  vault1:
+    image: vault:1.0.3
+    networks:
+      - infra
+    ports:
+      - 8200:8200
+    env_file:
+      - vault.env
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.hostname == node1]
+    command: server
