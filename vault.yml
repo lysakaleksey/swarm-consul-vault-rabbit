@@ -13,5 +13,5 @@ services:
       - vault.env
     deploy:
       placement:
-        constraints: [node.hostname == node1]
+        constraints: [node.hostname == $NODE1]
     command: server

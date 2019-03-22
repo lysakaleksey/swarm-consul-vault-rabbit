@@ -2,6 +2,9 @@
 
 source main.env
 
+# Vault address. Use first swarm node for now
+export VAULT_ADDR="http://$(docker-machine ip $NODE1):8200"
+
 echo ""
 echo "Initializing vault"
 vault operator init > vault-init.keys

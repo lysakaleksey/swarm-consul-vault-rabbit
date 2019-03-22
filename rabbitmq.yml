@@ -2,56 +2,55 @@ version: '3.6'
 networks:
   infra:
     external: true
-volumes:
-  rabbitmq-1-data:
-  rabbitmq-2-data:
-  rabbitmq-3-data:
+#volumes:
+#  rabbitmq-1-data:
+#  rabbitmq-2-data:
+#  rabbitmq-3-data:
 services:
-  server-1:
+  rabbitmq-1:
     image: lysakaleksey/rabbitmq:3.7-management-alpine
     hostname: rabbitmq-1
     networks:
       - infra
     env_file:
       - rabbitmq.env
-    volumes:
-      - rabbitmq-1-data:/var/lib/rabbitmq
+#    volumes:
+#      - rabbitmq-1-data:/var/lib/rabbitmq
     deploy:
-      mode: global
+#      mode: global
       placement:
-        constraints: [node.hostname == node1]
-  server-2:
+        constraints: [node.hostname == $NODE1]
+  rabbitmq-2:
     image: lysakaleksey/rabbitmq:3.7-management-alpine
     hostname: rabbitmq-2
     networks:
       - infra
     env_file:
       - rabbitmq.env
-    volumes:
-      - rabbitmq-2-data:/var/lib/rabbitmq
+#    volumes:
+#      - rabbitmq-2-data:/var/lib/rabbitmq
     deploy:
-      mode: global
+#      mode: global
       placement:
-        constraints: [node.hostname == node2]
-  server-3:
+        constraints: [node.hostname == $NODE2]
+  rabbitmq-3:
     image: lysakaleksey/rabbitmq:3.7-management-alpine
     hostname: rabbitmq-3
     networks:
       - infra
     env_file:
       - rabbitmq.env
-    volumes:
-      - rabbitmq-3-data:/var/lib/rabbitmq
+#    volumes:
+#      - rabbitmq-3-data:/var/lib/rabbitmq
     deploy:
-      mode: global
       placement:
-        constraints: [node.hostname == node3]
+        constraints: [node.hostname == $NODE3]
   haproxy:
     image: lysakaleksey/haproxy-for-rabbitmq:1.9-alpine
     deploy:
       mode: global
     ports:
-      - 1936:1936   # haproxy ui
+      - 1936:1936   # haproxy  ui
       - 5672:5672   # rabbitmq tcp
       - 15672:15672 # rabbitmq ui
     networks:
