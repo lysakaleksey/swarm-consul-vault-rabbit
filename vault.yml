@@ -3,7 +3,7 @@ networks:
   infra:
     external: true
 services:
-  vault1:
+  vault-1:
     image: vault:1.0.3
     networks:
       - infra
@@ -13,5 +13,6 @@ services:
       - vault.env
     deploy:
       placement:
-        constraints: [node.hostname == $NODE1]
+        constraints:
+          - "node.hostname == $NODE1"
     command: server

@@ -1,0 +1,16 @@
+version: '3.6'
+networks:
+  infra:
+    external: true
+services:
+  app:
+    image: lysakaleksey/rabbitmq-app:latest
+    deploy:
+      mode: global
+    networks:
+      - infra
+    ports:
+      - 8080:8080
+    environment:
+      - AMQP_URL=amqp://admin:Passw0rd@rabbitmq:5672 # rabbitmq is the haproxy balanced
+
