@@ -8,3 +8,5 @@ docker stack rm app
 docker stack rm rabbitmq
 docker stack rm vault
 docker stack rm consul
+
+docker network remove ${NETWORK}

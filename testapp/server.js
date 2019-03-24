@@ -7,6 +7,7 @@ const amqp = require('amqplib/callback_api');
 // Constants
 const PORT = 8080;
 const HOST = '0.0.0.0';
+const QUEUE = 'ha.hello';
 
 // App
 const app = express();
@@ -17,16 +18,15 @@ app.get('/', (req, res) => {
 
 app.get('/send', (req, res) => {
 
-  amqp.connect(process.env.AMQP_URL, function (err, conn) {
+  amqp.connect(process.env.SEND_URL, function (err, conn) {
     if (err) {
-      res.send('Error ' + err);
+      res.send('Connect errors ' + err);
     } else {
       conn.createChannel(function (err, ch) {
-        var q = 'hello';
         var msg = 'Hello World!';
 
-        ch.assertQueue(q, {durable: true});
-        ch.sendToQueue(q, Buffer.from(msg));
+        ch.assertQueue(QUEUE, {durable: true});
+        ch.sendToQueue(QUEUE, Buffer.from(msg));
 
         setImmediate(function () {
           ch.close();
@@ -40,8 +40,40 @@ app.get('/send', (req, res) => {
 
 });
 
+app.get('/get', (req, res) => {
+
+  amqp.connect(process.env.GET_URL, function (err, conn) {
+    if (err) {
+      res.send('Connect error ' + err);
+    } else {
+      conn.createChannel(function (err, ch) {
+
+        ch.assertQueue(QUEUE, {durable: true});
+
+        ch.get(QUEUE, {}, function (err, msg) {
+          if (err) {
+            res.send('Get error ' + err);
+          } else if (msg) {
+            res.send('Received ' + msg.content.toString());
+            ch.ack(msg);
+          } else {
+            res.send('No data found');
+          }
+
+          setImmediate(function () {
+            ch.close();
+            conn.close();
+          });
+
+        });
+
+      });
+    }
+  });
+
+});
+
 
 app.listen(PORT, HOST);
 
-console.log('AMQP url is ' + process.env.AMQP_URL);
 console.log(`Running on http://${HOST}:${PORT}`);
