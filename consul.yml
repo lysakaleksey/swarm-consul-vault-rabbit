@@ -20,7 +20,7 @@ services:
       placement:
         constraints:
           - "node.hostname == $NODE1"
-    command: "agent -server -bootstrap-expect 3 -client 0.0.0.0"
+    command: "agent -server -bootstrap-expect 3 -retry-join consul-2 -retry-join consul-3 -client 0.0.0.0"
   consul-2:
     image: consul:1.4.3
     networks:
@@ -33,7 +33,7 @@ services:
       placement:
         constraints:
           - "node.hostname == $NODE2"
-    command: "agent -server -retry-join consul-1 -client 0.0.0.0"
+    command: "agent -server -bootstrap-expect 3 -retry-join consul-1 -retry-join consul-3 -client 0.0.0.0"
   consul-3:
     image: consul:1.4.3
     networks:
@@ -46,7 +46,7 @@ services:
       placement:
         constraints:
           - "node.hostname == $NODE3"
-    command: "agent -server -retry-join consul-1 -client 0.0.0.0"
+    command: "agent -server -bootstrap-expect 3 -retry-join consul-1 -retry-join consul-2 -client 0.0.0.0"
   consul:
     image: consul:1.4.3
     networks:
@@ -60,4 +60,4 @@ services:
       - 8600:8600/udp
     deploy:
       mode: global
-    command: "agent -ui -retry-join consul-1 -client 0.0.0.0"
+    command: "agent -ui -retry-join consul-1 -retry-join consul-2 -retry-join consul-3 -client 0.0.0.0"
