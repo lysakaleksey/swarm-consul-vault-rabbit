@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 source main.env
+source vault.env
 
 eval $(docker-machine env $MANAGER)
 
@@ -12,13 +13,19 @@ if [[ -z "$exists" ]]; then
 fi
 
 # Deploy consul stack
-env NODE1=${NODE1} NODE2=${NODE2} NODE3=${NODE3} docker stack deploy -c consul.yml consul
+env NODE1=${NODE1} NODE2=${NODE2} NODE3=${NODE3} \
+docker stack deploy -c consul.yml consul
 
-## Deploy vault stack
-env NODE1=${NODE1} NODE2=${NODE2} NODE3=${NODE3} docker stack deploy -c vault.yml vault
+# Deploy vault stack
+env NODE1=${NODE1} NODE2=${NODE2} NODE3=${NODE3} VAULT_ADDR=${VAULT_ADDR} \
+VAULT_1_CONFIG=${VAULT_1_CONFIG} \
+VAULT_2_CONFIG=${VAULT_2_CONFIG} \
+VAULT_3_CONFIG=${VAULT_3_CONFIG} \
+docker stack deploy -c vault.yml vault
 
 # Deploy rabbit stack
-env NODE1=${NODE1} NODE2=${NODE2} NODE3=${NODE3} docker stack deploy -c rabbitmq.yml rabbitmq
+env NODE1=${NODE1} NODE2=${NODE2} NODE3=${NODE3} \
+docker stack deploy -c rabbitmq.yml rabbitmq
 
 # Deploy app stack
 docker stack deploy -c app.yml app
