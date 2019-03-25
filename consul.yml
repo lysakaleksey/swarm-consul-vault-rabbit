@@ -11,7 +11,7 @@ services:
   consul-1:
     image: consul:1.4.3
     networks:
-      - consul
+      - infra
     env_file:
       - consul.env
     #    volumes:
@@ -20,11 +20,11 @@ services:
       placement:
         constraints:
           - "node.hostname == $NODE1"
-    command: "agent -server -bootstrap-expect 3 -retry-join consul-2 -retry-join consul-3 -client 0.0.0.0"
+    command: "agent -server -ui -bootstrap-expect 3 -retry-join consul-2 -retry-join consul-3 -client 0.0.0.0"
   consul-2:
     image: consul:1.4.3
     networks:
-      - consul
+      - infra
     env_file:
       - consul.env
     #    volumes:
@@ -33,11 +33,11 @@ services:
       placement:
         constraints:
           - "node.hostname == $NODE2"
-    command: "agent -server -bootstrap-expect 3 -retry-join consul-1 -retry-join consul-3 -client 0.0.0.0"
+    command: "agent -server -ui -bootstrap-expect 3 -retry-join consul-1 -retry-join consul-3 -client 0.0.0.0"
   consul-3:
     image: consul:1.4.3
     networks:
-      - consul
+      - infra
     env_file:
       - consul.env
     #    volumes:
@@ -46,11 +46,10 @@ services:
       placement:
         constraints:
           - "node.hostname == $NODE3"
-    command: "agent -server -bootstrap-expect 3 -retry-join consul-1 -retry-join consul-2 -client 0.0.0.0"
+    command: "agent -server -ui -bootstrap-expect 3 -retry-join consul-1 -retry-join consul-2 -client 0.0.0.0"
   consul:
     image: consul:1.4.3
     networks:
-      - consul
       - infra
     env_file:
       - consul.env
