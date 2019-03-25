@@ -12,6 +12,7 @@ services:
     ports:
       - 8080:8080
     environment:
+      - QUEUE=ha.hello2
       - SEND_URL=amqp://admin:Passw0rd@rabbitmq:5672 # rabbitmq is the haproxy balanced
-      - GET_URL=amqp://admin:Passw0rd@rabbitmq-3:5672 # Get from 3rd node
+      - GET_URL=amqp://admin:Passw0rd@rabbitmq-3:5672 # Get from 3rd server
 

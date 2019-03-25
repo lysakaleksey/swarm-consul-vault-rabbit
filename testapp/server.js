@@ -7,7 +7,6 @@ const amqp = require('amqplib/callback_api');
 // Constants
 const PORT = 8080;
 const HOST = '0.0.0.0';
-const QUEUE = 'ha.hello';
 
 // App
 const app = express();
@@ -23,10 +22,8 @@ app.get('/send', (req, res) => {
       res.send('Connect errors ' + err);
     } else {
       conn.createChannel(function (err, ch) {
-        var msg = 'Hello World!';
 
-        ch.assertQueue(QUEUE, {durable: true});
-        ch.sendToQueue(QUEUE, Buffer.from(msg));
+        ch.sendToQueue(process.env.QUEUE, Buffer.from('Hello World!'));
 
         setImmediate(function () {
           ch.close();
@@ -47,10 +44,11 @@ app.get('/get', (req, res) => {
       res.send('Connect error ' + err);
     } else {
       conn.createChannel(function (err, ch) {
+        if (err) {
+          console.log('get createChannel err ' + err);
+        }
 
-        ch.assertQueue(QUEUE, {durable: true});
-
-        ch.get(QUEUE, {}, function (err, msg) {
+        ch.get(process.env.QUEUE, {}, function (err, msg) {
           if (err) {
             res.send('Get error ' + err);
           } else if (msg) {
