@@ -20,5 +20,6 @@ env NODE1=${NODE1} NODE2=${NODE2} NODE3=${NODE3} docker stack deploy -c vault.ym
 # Deploy rabbit stack
 env NODE1=${NODE1} NODE2=${NODE2} NODE3=${NODE3} docker stack deploy -c rabbitmq.yml rabbitmq
 
+# Deploy app stack
 docker stack deploy -c app.yml app
 

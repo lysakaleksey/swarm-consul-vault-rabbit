@@ -1,0 +1,60 @@
+{
+  "global_parameters": [
+    {
+      "name": "cluster_name",
+      "value": "default"
+    }
+  ],
+  "policies": [
+    {
+      "vhost": "/",
+      "name": "ha-all",
+      "pattern": "^ha\\.",
+      "apply-to": "queues",
+      "definition": {
+        "ha-mode": "all"
+      },
+      "priority": 1
+    }
+  ],
+  "queues": [
+    {
+      "name": "ha.hello2",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-message-ttl": 60000,
+        "x-dead-letter-exchange": "dlx.hello2.dead"
+      }
+    },
+    {
+      "name": "ha.hello2.dead",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "dlx.hello2.dead",
+      "vhost": "/",
+      "type": "fanout",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "dlx.hello2.dead",
+      "vhost": "/",
+      "destination": "ha.hello2.dead",
+      "destination_type": "queue",
+      "routing_key": "",
+      "arguments": {}
+    }
+  ]
+}
