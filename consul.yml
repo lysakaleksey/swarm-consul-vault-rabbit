@@ -9,7 +9,7 @@ networks:
 #  consul-3-data:
 services:
   consul-1:
-    image: consul:1.4.3
+    image: consul:1.4.4
     networks:
       - infra
     env_file:
@@ -22,7 +22,7 @@ services:
           - "node.hostname == $NODE1"
     command: "agent -server -ui -bootstrap-expect 3 -retry-join consul-2 -retry-join consul-3 -client 0.0.0.0"
   consul-2:
-    image: consul:1.4.3
+    image: consul:1.4.4
     networks:
       - infra
     env_file:
@@ -35,7 +35,7 @@ services:
           - "node.hostname == $NODE2"
     command: "agent -server -ui -bootstrap-expect 3 -retry-join consul-1 -retry-join consul-3 -client 0.0.0.0"
   consul-3:
-    image: consul:1.4.3
+    image: consul:1.4.4
     networks:
       - infra
     env_file:
@@ -48,14 +48,14 @@ services:
           - "node.hostname == $NODE3"
     command: "agent -server -ui -bootstrap-expect 3 -retry-join consul-1 -retry-join consul-2 -client 0.0.0.0"
   consul:
-    image: consul:1.4.3
+    image: consul:1.4.4
     networks:
       - infra
     env_file:
       - consul.env
     ports:
       - 8500:8500
-      - 8600:8600/tcp
+      - 8600:8600
       - 8600:8600/udp
     deploy:
       mode: global
