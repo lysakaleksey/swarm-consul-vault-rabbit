@@ -21,6 +21,7 @@ env NODE1=${NODE1} NODE2=${NODE2} NODE3=${NODE3} VAULT_ADDR=${VAULT_ADDR} \
 VAULT_1_CONFIG=${VAULT_1_CONFIG} \
 VAULT_2_CONFIG=${VAULT_2_CONFIG} \
 VAULT_3_CONFIG=${VAULT_3_CONFIG} \
+CONSUL_ARGS="${CONSUL_ARGS}" \
 docker stack deploy -c vault.yml vault
 
 # Deploy rabbit stack

@@ -4,44 +4,44 @@ networks:
     external: true
 services:
   vault-1:
-    image: vault:1.0.3
+    image: lysakaleksey/vault-consul:latest
     networks:
       - infra
     ports:
       - 8200:8200
     environment:
       - VAULT_ADDR=$VAULT_ADDR
+      - CONSUL_ARGS=$CONSUL_ARGS
       - VAULT_LOCAL_CONFIG=$VAULT_1_CONFIG
     deploy:
       placement:
         constraints:
           - "node.hostname == $NODE1"
-    command: server
   vault-2:
-    image: vault:1.0.3
+    image: lysakaleksey/vault-consul:latest
     networks:
       - infra
     ports:
       - 8201:8200
     environment:
       - VAULT_ADDR=$VAULT_ADDR
+      - CONSUL_ARGS=$CONSUL_ARGS
       - VAULT_LOCAL_CONFIG=$VAULT_2_CONFIG
     deploy:
       placement:
         constraints:
           - "node.hostname == $NODE2"
-    command: server
   vault-3:
-    image: vault:1.0.3
+    image: lysakaleksey/vault-consul:latest
     networks:
       - infra
     ports:
       - 8202:8200
     environment:
       - VAULT_ADDR=$VAULT_ADDR
+      - CONSUL_ARGS=$CONSUL_ARGS
       - VAULT_LOCAL_CONFIG=$VAULT_3_CONFIG
     deploy:
       placement:
         constraints:
           - "node.hostname == $NODE3"
-    command: server

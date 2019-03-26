@@ -17,45 +17,34 @@ RUN addgroup vault && adduser -S -G vault vault
 # the rest of this may change over time.
 RUN addgroup consul && adduser -S -G consul consul
 
-# Set up certificates, base tools, and Vault.
-RUN set -eux; apk add --no-cache ca-certificates curl gnupg openssl libcap su-exec dumb-init iputils jq tzdata && \
-    mkdir -p /tmp/build/vault && \
-    mkdir -p /tmp/build/consul && \
-    cd /tmp/build/vault && \
-    wget ${HASHICORP_RELEASES}/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip && \
-    unzip -d /bin vault_${VAULT_VERSION}_linux_amd64.zip && \
-    cd /tmp/build/consul && \
+# Set up base tools, consul, vault.
+RUN apk add --update --no-cache libcap su-exec dumb-init && \
+    mkdir -p /tmp/build && \
+    cd /tmp/build && \
     wget ${HASHICORP_RELEASES}/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip && \
-    unzip -d /bin consul_${CONSUL_VERSION}_linux_amd64.zip && \
+    wget ${HASHICORP_RELEASES}/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip && \
+    unzip consul_${CONSUL_VERSION}_linux_amd64.zip -d /bin && \
+    unzip vault_${VAULT_VERSION}_linux_amd64.zip -d /bin && \
     cd /tmp && \
     rm -rf /tmp/build
 
 # /vault/logs is made available to use as a location to store audit logs, if
 # desired; /vault/file is made available to use as a location with the file
 # storage backend, if desired; the server will be started with /vault/config as
-# the configuration directory so you can add additional config files in that
-# location.
+# the configuration directory so you can add additional config files in that location.
 RUN mkdir -p /vault/logs && mkdir -p /vault/file && mkdir -p /vault/config && chown -R vault:vault /vault
 
 # The /consul/data dir is used by Consul to store state. The agent will be started
-# with /consul/config as the configuration directory so you can add additional
-# config files in that location.
+# with /consul/config as the configuration directory so you can add additional config files in that location.
 RUN mkdir -p /consul/data && mkdir -p /consul/config && chown -R consul:consul /consul
 
-# set up nsswitch.conf for Go's "netgo" implementation which is used by Consul,
-# otherwise DNS supercedes the container's hosts file, which we don't want.
-RUN test -e /etc/nsswitch.conf || echo 'hosts: files dns' > /etc/nsswitch.conf
-
-# Expose the logs directory as a volume since there's potentially long-running
-# state in there
+# Expose the logs directory as a volume since there's potentially long-running state in there
 VOLUME /vault/logs
 
-# Expose the file directory as a volume since there's potentially long-running
-# state in there
+# Expose the file directory as a volume since there's potentially long-running state in there
 VOLUME /vault/file
 
-# 8200/tcp is the primary interface that applications use to interact with
-# Vault.
+# 8200/tcp is the primary interface that applications use to interact with Vault.
 EXPOSE 8200
 
 COPY vault-entrypoint.sh /usr/local/bin/vault-entrypoint.sh
