@@ -1,8 +1,9 @@
 # Swarm Consul Rabbit
 
 ## 1. Prerequisites
-* docker
-* docker-machine
+* docker v18.09.2+
+* docker-machine v0.16.1
+* vault v1.0.3 (required to init only) 
 * internet access
 
 ## 2. Build custom images
