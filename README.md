@@ -9,7 +9,7 @@
 ## 2. Build custom images
 Please edit **build.sh** in order to use your container repository.
 
-Your repository has to be set in **rabbitmq.yml** and **app.yml** files too.
+Your repository has to be set in **rabbitmq.yml**, **vault.yml**, **app.yml** files too.
 
 ## 3. Edit environments
 Please find these environment variables in the root folder:
