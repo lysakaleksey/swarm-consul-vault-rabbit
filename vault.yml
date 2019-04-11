@@ -13,6 +13,7 @@ services:
       - VAULT_ADDR=$VAULT_ADDR
       - CONSUL_ARGS=$CONSUL_ARGS
       - VAULT_LOCAL_CONFIG=$VAULT_1_CONFIG
+      - CONSUL_LOCAL_CONFIG=$CONSUL_LOCAL_CONFIG
     deploy:
       placement:
         constraints:
@@ -27,6 +28,7 @@ services:
       - VAULT_ADDR=$VAULT_ADDR
       - CONSUL_ARGS=$CONSUL_ARGS
       - VAULT_LOCAL_CONFIG=$VAULT_2_CONFIG
+      - CONSUL_LOCAL_CONFIG=$CONSUL_LOCAL_CONFIG
     deploy:
       placement:
         constraints:
@@ -41,6 +43,7 @@ services:
       - VAULT_ADDR=$VAULT_ADDR
       - CONSUL_ARGS=$CONSUL_ARGS
       - VAULT_LOCAL_CONFIG=$VAULT_3_CONFIG
+      - CONSUL_LOCAL_CONFIG=$CONSUL_LOCAL_CONFIG
     deploy:
       placement:
         constraints:
