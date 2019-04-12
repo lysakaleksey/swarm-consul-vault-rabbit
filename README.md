@@ -35,7 +35,12 @@ After editing `rabbitmq-init.json`, please run `rabbitmq-init.sh`. No arguments 
 ### 4.2 Vault initialization
 Please edit (optionally) `secrets.json` to put default secret key-value pairs which will be initially load into vault.
 
-To initialize `vault`, please use `vault-init.sh`. No arguments needed.
+To initialize, please execute these commands in terminal:
+```
+source main.env
+eval $(docker-machine env $MANAGER)
+bash vault-init.sh
+```
 
 ## 5. Open UIs in the browser
 Please note `swarm1` is the docker machine node name for the below UIs:
